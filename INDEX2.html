@@ -51,6 +51,30 @@
 					attribute: "Strength",
 					attack_type: "Melee",
 					difficulty: "2"
+				},
+				{
+					name: "Juggernaut",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "4"
+				},
+				{
+					name: "Lina",
+					attribute: "Intelligence",
+					attack_type: "Range",
+					difficulty: "4"
+				},
+				{
+					name: "Snapfire",
+					attribute: "Strength",
+					attack_type: "Range",
+					difficulty: "5"
+				},
+				{
+					name: "Earth Spirit",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "10"
 				}
 			];
 			
@@ -119,6 +143,7 @@
 		heroesArray.forEach( hero => {
 			ModuleAnonymFunction.addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty);
 		});
+
 	</script>  
 </body>
 </html>
