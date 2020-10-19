@@ -1,0 +1,124 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div>Average difficulty:
+	<span id="result"></span>
+	</div>
+	<script>
+		const heroesArray = [
+				{
+					name: "Arc Warden",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "10"
+				},
+				{
+					name: "Kunkka",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "4"
+				},
+				{
+					name: "Zeus",
+					attribute: "Intelligence",
+					attack_type: "Range",
+					difficulty: "2"
+				},
+				{
+					name: "Phoenix",
+					attribute: "Strength",
+					attack_type: "Range",
+					difficulty: "8"
+				},
+				{
+					name: "Meepo",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "10"
+				},
+				{
+					name: "Void Spirit",
+					attribute: "Intelligence",
+					attack_type: "Melee",
+					difficulty: "8"
+				},
+				{
+					name: "Axe",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "2"
+				}
+			];
+			
+		const ModuleAnonymFunction = (function () {
+
+			const heroes = [];
+			let table;
+
+		function CreateHero(name, attribute, attack_type, difficulty) {
+			this.name = name;
+			this.attribute = attribute;
+			this.attack_type = attack_type;
+			this.difficulty = difficulty;
+		}
+
+		function addNewHero(name, attribute, attack_type, difficulty) {
+			const objectHero = new CreateHero(name, attribute, attack_type, difficulty)
+			heroes.push(objectHero);
+			if (heroes.length === 1) {
+			table = document.createElement('table');
+			const row = document.createElement('tr');
+			const firstTrTableHTML = 
+				`<td>Name</td>
+				 <td>Attribute</td>
+				 <td>Attack type</td>
+				 <td>Difficulty</td>`;
+			row.insertAdjacentHTML('beforeend', firstTrTableHTML);
+			table.appendChild(row);
+			}
+			addColumn();
+			difficultyAverage();
+		}
+
+
+		function addColumn() {
+			const hero = heroes[heroes.length - 1];
+			const row = document.createElement('tr');
+			const NextOneTrTableHTML = 
+			`<td>${ hero.name }</td>
+			 <td>${ hero.attribute }</td>
+			 <td>${ hero.attack_type }</td>
+			 <td>${ hero.difficulty }</td>`;
+			row.insertAdjacentHTML('beforeend', NextOneTrTableHTML)
+			table.appendChild(row);
+
+			document.body.appendChild(table);
+		}
+
+		function difficultyAverage() {
+
+			const element = document.querySelector('table');
+			const resultElement = document.querySelector('#result');
+			let avg = 0;
+			Array.from(element.children).forEach((child, index) => {
+			if (index !== 0) {
+			avg += +child.lastElementChild.textContent;
+			}
+		});
+
+		resultElement.textContent = +(avg / heroesArray.length).toFixed(2);
+}
+
+		return {addNewHero};
+})();
+
+		heroesArray.forEach( hero => {
+			ModuleAnonymFunction.addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty);
+		});
+	</script>  
+</body>
+</html>

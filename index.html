@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+	<html>
+	<head>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<script>
+			'use strict'
+			const elements = prompt('Enter elements in array', '');
+			const arrayElem = elements.split(' ');
+			const count = arrayElem.length;
+			const arr2 = [];
+			for(let i=0;i<count;i++){
+				if(isNaN(arrayElem[i])){
+					arrayElem[i]=prompt('Warning, input only a number in' + Number(i+1) + 'element');
+				}
+			}
+			for(let i=0;i<count;i++){
+				arr2[i]=Number(arrayElem[i]);
+			}
+			for (let i = 0; i < arrayElem.length - 1; i++) {
+				for (let j = 0; j < arrayElem.length - i - 1; j++) {
+					if (arr2[j] > arr2[j + 1]) {
+						let temp = arr2[j];
+						arr2[j] = arr2[j + 1];
+						arr2[j + 1] = temp;
+						}
+					}
+			}
+			const min = arr2[0];
+			const max = arr2[arr2.length - 1];
+			let sum=0;
+			for(var j=0;j<count-1;j++){
+				sum+=Number(arr2[j]);
+			}
+			alert('Max element in array: '+ max);
+			alert('Min element in array: '+ min);
+			alert('Sum of elements in array: ' + sum);
+			alert('Array after sort: ' + arr2); 
+		</script>
+	</body>
+</html>
