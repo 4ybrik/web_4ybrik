@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+	<div id="box"><font color="red">Average difficulty:</font>
+		<span id="result"></span>
+	</div>
+	<form id="form">
+		<label for="name">Enter name
+			<input type="text" id="name" name="name">
+		</label>
+	<br>
+		<label for="attribute">Enter attribute
+			<input type="text" id="attribute" name="attribute">
+		</label>
+	<br>
+		<label for="attack_type">Enter attack type
+			<input type="text" id="attack_type" name="attack_type">
+		</label>
+	<br>
+		<label for="difficulty">Enter difficulty
+			<input type="text" id="difficulty" name="difficulty">
+		</label>
+	<br>
+	<button type="submit">Enter hero</button>
+</form>
+	<script>	
+			const heroesArray = [
+				{
+					name: "Arc Warden",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "10"
+				},
+				{
+					name: "Kunkka",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "4"
+				},
+				{
+					name: "Zeus",
+					attribute: "Intelligence",
+					attack_type: "Range",
+					difficulty: "2"
+				},
+				{
+					name: "Phoenix",
+					attribute: "Strength",
+					attack_type: "Range",
+					difficulty: "8"
+				},
+				{
+					name: "Meepo",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "10"
+				},
+				{
+					name: "Void Spirit",
+					attribute: "Intelligence",
+					attack_type: "Melee",
+					difficulty: "8"
+				},
+				{
+					name: "Axe",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "2"
+				},
+				{
+					name: "Juggernaut",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "4"
+				},
+				{
+					name: "Lina",
+					attribute: "Intelligence",
+					attack_type: "Range",
+					difficulty: "4"
+				},
+				{
+					name: "Snapfire",
+					attribute: "Strength",
+					attack_type: "Range",
+					difficulty: "5"
+				},
+				{
+					name: "Earth Spirit",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "10"
+				},
+				{
+					name: "Doom",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "5"
+				},
+				{
+					name: "Luna",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "3"
+				},
+				{
+					name: "Anti-mage",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "7"
+				},
+				{
+					name: "Terrorblade",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "5"
+				},
+				{
+					name: "Morphling",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "9"
+				},
+				{
+					name: "Ember Spirit",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "9"
+				}
+			];	
+
+		const form = document.querySelector('#form');
+		const ModuleAnonymFunction = (function () {
+
+			const heroes = [];
+			let table;
+
+		function CreateHero(name, attribute, attack_type, difficulty) {
+			this.name = name;
+			this.attribute = attribute;
+			this.attack_type = attack_type;
+			this.difficulty = difficulty;
+		}
+
+		function addNewHero(name, attribute, attack_type, difficulty) {
+			const objectHero = new CreateHero(name, attribute, attack_type, difficulty)
+			heroes.push(objectHero);
+			if (heroes.length === 1) {
+				table = document.createElement('table');
+				const row = document.createElement('tr');
+				const firstTrTableHTML = `
+				<td>Name</td>
+				<td>Attribute</td>
+				<td>Attack Type</td>
+				<td>Difficulty</td>
+				<td></td>`;
+				row.insertAdjacentHTML('beforeend', firstTrTableHTML);
+				table.appendChild(row);
+			}
+			descriptionForNewHero();
+			difficultyAverage();
+		}
+		function addColumn() {
+			const hero = heroes[heroes.length - 1];
+			const row = document.createElement('tr');
+			const NextOneTrTableHTML = 
+			`<td>${ hero.name }</td>
+			 <td>${ hero.attribute }</td>
+			 <td>${ hero.attack_type }</td>
+			 <td>${ hero.difficulty }</td>`;
+			row.insertAdjacentHTML('beforeend', NextOneTrTableHTML)
+			table.appendChild(row);
+
+			document.body.appendChild(table);
+		}
+
+		function descriptionForNewHero() {
+			const objectHero = heroes[heroes.length - 1];
+			const row = document.createElement('tr');
+			for(let prop in objectHero) {
+				const column = document.createElement('td');
+				column.textContent = objectHero[prop];
+				row.appendChild(column);
+			}
+			const deleteHeroButton = document.createElement('td');
+			deleteHeroButton.textContent = 'Delete';
+			row.appendChild(deleteHeroButton);
+			table.appendChild(row);
+			document.body.appendChild(table);
+		}
+
+		function difficultyAverage() {
+			const element = document.querySelector('table');
+			element.addEventListener('click', deleteHero);
+			const resultEl = document.querySelector('#result');
+			let avg = 0;
+			heroes.forEach(item => {
+				avg += +item.difficulty;
+			});
+
+			resultEl.textContent = +(avg / heroes.length).toFixed(2);
+		}
+
+
+		function deleteHero(event) {
+			if (event.target.closest('tr') && event.target.textContent === 'Delete') {
+				const deletedElement = event.target.closest('tr');
+				Array.from(table.children).forEach((child, index) => {
+					if (child === deletedElement) {
+						heroes.splice(index - 1, 1);
+						deletedElement.remove();
+					}
+				})
+			}
+		}
+
+		return {addNewHero};
+})();
+
+
+		heroesArray.forEach( hero => {
+					ModuleAnonymFunction.addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty);
+		});
+
+		form.addEventListener('submit', event => {
+			event.preventDefault();
+			const name = form.name.value.trim();
+			const attribute = form.attribute.value.trim();
+			const attack_type = form.attack_type.value.trim();
+			const difficulty = form.difficulty.value.trim();
+			if (!name || !attribute || !attack_type || !difficulty) {
+				console.log('erro');
+				return;
+			}
+			ModuleAnonymFunction.addNewHero(name, attribute, attack_type, difficulty);
+			form.reset();
+});
+
+			ModuleAnonymFunction.addNewHero('Alchemist', 'Strength', 'Melee',3);
+			ModuleAnonymFunction.addNewHero('Weaver', 'Agility', 'Range',2);
+			ModuleAnonymFunction.addNewHero('Tiny', 'Strength', 'Melee',5);
+
+
+</script> 
+</body>
+</html>
