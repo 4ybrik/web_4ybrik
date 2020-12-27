@@ -249,21 +249,20 @@
 						}
 
 						function generateTable() {
-						let objectHero = {};
-						for(let i = 0; i < names.length; i++ ) {
-							objectHero.name=names[i];
-							objectHero.attribute = attributes[randomInteger(0,2)];
-							objectHero.attack_type = attack_types[randomInteger(0,1)];
-							objectHero.difficulty = Math.round((Math.random() * 10) * 10) / 10;
-						heroes.push(objectHero);
-						objectHero = {}
-							}
+							let objectHero = {};
+							for(let i = 0; i < names.length; i++ ) {
+								objectHero.name=names[i];
+								objectHero.attribute = attributes[randomInteger(0,2)];
+								objectHero.attack_type = attack_types[randomInteger(0,1)];
+								objectHero.difficulty = Math.round((Math.random() * 10) * 10) / 10;
+							heroesArray.push(objectHero);
+							objectHero = {}
+								}
 
 							heroesArray.forEach( hero => {
 								addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty)
 							})	
 						}
-
 						generateTable();  
 		        })
 
@@ -291,6 +290,7 @@
 		    ModuleAnonymFunction.addNewHero(name, attribute, attack_type, difficulty);
 			$('#form').trigger('reset');
 	});
+
 			ModuleAnonymFunction.getData();
 			ModuleAnonymFunction.addNewHero('Alchemist', 'Strength', 'Melee',3);
 			ModuleAnonymFunction.addNewHero('Weaver', 'Agility', 'Range',2);
