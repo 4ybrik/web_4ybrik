@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="newHeroApp">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<title>5_DOC</title>
+	<link rel="stylesheet" href="style.css"> 
+</head>
+<body ng-controller="heroController">
+	<div id="text-content"><font color="red">Average Difficulty:</font> <span>{{ averageDifficulty }}</span></div>
+	<div class="Add">
+		<form ng-submit="addNewHero(name, attribute, attack_type, difficulty)">
+            <div>
+			<div>
+			 <input ng-model="name" type="text" class="add_name" placeholder="Enter the name"/>
+			</div>
+			<div>
+		     <input ng-model="attribute" type="text" class="add_attribute" placeholder="Enter the attribute"/>
+		 	</div>
+		 	<div>
+		     <input ng-model="attack_type" type="text" class="add_attack_type" placeholder="Enter the attack type"/>
+		 	</div>
+		 	<div>
+		     <input ng-model="difficulty" type="text" class="add_difficulty" placeholder="Enter the difficulty"/>
+		 	</div>
+		     
+                  <div>
+                        <button class="buttonDefault" type="submit" id="btn1">
+                            Add hero
+                        </button>
+                  </div>
+                  <div>
+                        <button class="buttonDefault" type="button"  ng-click="endChanging(name, attribute, attack_type, difficulty)"  id="btn2">
+                            OK
+                        </button>
+                  </div>
+             </div>
+		</form>
+	</div>
+
+	<div class="page">
+		<table class="myTable">
+	            <thead>
+	                <tr>
+	                    <th>Name</th>
+	                    <th>Attribute</th>
+	                    <th>Attack Type</th>
+	                    <th>Difficulty</th>
+	                    <th>Delete</th>
+	                    <th>Change</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr ng-repeat="hero in heroes">
+	                    <td id="name">{{hero.name}}</td>   
+	                    <td id="attribute">{{hero.attribute}}</td>
+	                    <td id="attack_type">{{hero.attack_type}}</td>
+	                    <td id="difficulty">{{hero.difficulty}}</td>
+	                    <td ng-click="deleteHero($index)">Delete</td>
+	                    <td ng-click="changeHero($index)">Change</td>
+	                </tr>
+	            </tbody>
+	        </table>
+	    </div>
+        <script>
+        
+        var newHeroApp = angular.module("newHeroApp", []);
+
+        newHeroApp.controller("heroController", function($scope, $http) {
+            $scope.heroes = [];
+            $scope.lastIdNumber = 1;
+            $scope.averageDifficulty = 0;
+            $scope.changing = false; 
+            $scope.IdNumber = -1
+
+            $scope.addNewHero = function(name, attribute, attack_type, difficulty) {
+                $scope.heroes.push({
+                name, attribute, attack_type, difficulty: Number(difficulty), id: ++$scope.lastIdNumber
+            })
+
+            $scope.name = '';
+            $scope.attribute = '';
+            $scope.attack_type = '';
+            $scope.difficulty = '';
+            $scope.AvgDifficulty();
+            };
+
+           let getData = () => {
+                 function randomInteger(min, max) {
+                    let rand = min - 0.5 + Math.random() * (max - min + 1);
+                    return Math.round(rand);
+                }
+                let request = $http({ method: 'GET', url: 'https://jsonplaceholder.typicode.com/users'})
+                let objectHero = {};
+                const difficulty = [1,2,3,4,5,6,7,8,9,10] 
+                const names = ['Underlord', 'Leshrac', 'Windranger', 'Lina', 'Crystal Maiden', 'Ancient Apparation'];
+                const attributes = ['Strength', 'Agility', 'Intelligence']
+                const attack_types = ['Melee', 'Range']
+
+               request.then(data => {
+                for(let i = 0; i < names.length; i++ ) {
+                    objectHero.name = names[i];
+                    objectHero.attribute = attributes[randomInteger(0,2)];
+                    objectHero.attack_type = attack_types[randomInteger(0,1)];
+                    objectHero.difficulty = Math.round((Math.random() * 10) * 10) / 10;
+                    $scope.heroes.push(objectHero);
+                    objectHero = {};
+                    $scope.AvgDifficulty();
+                }
+
+                heroesArray.forEach(hero => {
+                    objectHero.name = hero.name;
+                    objectHero.attribute = hero.attribute[randomInteger(0,2)];
+                    objectHero.attack_type = hero.attack_type[randomInteger(0,1)];
+                    objectHero.difficulty = hero.difficulty;
+                    $scope.heroes.push(objectHero);
+                    objectHero = {};
+
+                })
+               });
+
+               request.catch(err => console.log(err));
+           } 
+
+           getData();
+
+             $scope.changeHero = function(index) {
+                $scope.changing = true;
+                $scope.name = $scope.heroes[index].name;
+                $scope.attribute = $scope.heroes[index].attribute;
+                $scope.attack_type = $scope.heroes[index].attack_type;
+                $scope.difficulty = $scope.heroes[index].difficulty;    
+                $scope.IdNumber = index;
+            }
+
+            $scope.endChanging = function(name, attribute, attack_type, difficulty) {
+                let changedHero = {
+                    name, attribute, attack_type, difficulty: Number(difficulty)
+                };
+                $scope.heroes[$scope.IdNumber] = changedHero;
+                $scope.name = '';
+                $scope.attribute = '';
+                $scope.attack_type = '';
+                $scope.difficulty = 0;
+                $scope.changing = false;
+                $scope.AvgDifficulty();
+            }
+
+            $scope.deleteHero = function(index) {
+                $scope.heroes.splice(index, 1);
+                $scope.AvgDifficulty();
+            };
+            $scope.AvgDifficulty = function() {
+                let sum = 0;
+                for(let key of $scope.heroes) {
+                    sum += key.difficulty; 
+                }
+                let averageDifficulty = sum / $scope.heroes.length
+                $scope.averageDifficulty = Math.round(averageDifficulty * 100) / 100;
+            }
+        });
+        </script>
+</body>
+</html>
