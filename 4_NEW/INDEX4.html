@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<title>4_DOC</title>
+	<link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+	 <div id="box"><font color="red">Average difficulty:</font>
+		<span id="result"></span>
+	</div>
+
+	<form id="form">
+		<label for="name">Enter name
+			<input type="text" id="name" name="name">
+		</label>
+	<br>
+		<label for="attribute">Enter attribute
+			<input type="text" id="attribute" name="attribute">
+		</label>
+	<br>
+		<label for="attack_type">Enter attack type
+			<input type="text" id="attack_type" name="attack_type">
+		</label>
+	<br>
+		<label for="difficulty">Enter difficulty
+			<input type="text" id="difficulty" name="difficulty">
+		</label>
+	<br>
+	<button type="submit">Enter hero</button>
+</form>
+	<script>
+			const heroesArray = [
+				{
+					name: "Arc Warden",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "10"
+				},
+				{
+					name: "Kunkka",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "4"
+				},
+				{
+					name: "Zeus",
+					attribute: "Intelligence",
+					attack_type: "Range",
+					difficulty: "2"
+				},
+				{
+					name: "Phoenix",
+					attribute: "Strength",
+					attack_type: "Range",
+					difficulty: "8"
+				},
+				{
+					name: "Meepo",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "10"
+				},
+				{
+					name: "Void Spirit",
+					attribute: "Intelligence",
+					attack_type: "Melee",
+					difficulty: "8"
+				},
+				{
+					name: "Axe",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "2"
+				},
+				{
+					name: "Juggernaut",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "4"
+				},
+				{
+					name: "Lina",
+					attribute: "Intelligence",
+					attack_type: "Range",
+					difficulty: "4"
+				},
+				{
+					name: "Snapfire",
+					attribute: "Strength",
+					attack_type: "Range",
+					difficulty: "5"
+				},
+				{
+					name: "Earth Spirit",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "10"
+				},
+				{
+					name: "Doom",
+					attribute: "Strength",
+					attack_type: "Melee",
+					difficulty: "5"
+				},
+				{
+					name: "Luna",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "3"
+				},
+				{
+					name: "Anti-mage",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "7"
+				},
+				{
+					name: "Terrorblade",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "5"
+				},
+				{
+					name: "Morphling",
+					attribute: "Agility",
+					attack_type: "Range",
+					difficulty: "9"
+				},
+				{
+					name: "Ember Spirit",
+					attribute: "Agility",
+					attack_type: "Melee",
+					difficulty: "9"
+				}
+			];	
+			$( document ).ready(function() {
+			const form = $('#form');
+			const ModuleAnonymFunction = (function () {
+				const heroes = [];
+				let table;
+
+				function CreateHero(name, attribute, attack_type, difficulty) {
+					this.name = name;
+					this.attribute = attribute;
+					this.attack_type = attack_type;
+					this.difficulty = difficulty;
+				}
+
+				function addNewHero(name, attribute, attack_type, difficulty) {
+					const objectHero = new CreateHero(name, attribute, attack_type, difficulty)
+					heroes.push(objectHero);
+						if (heroes.length === 1) {
+							table = $('<table></table>');
+							const row = $('<tr></tr>');
+							const name = $('<td>Name</td>');
+				            row.append(name);
+				            const attribute = $('<td>Attribute</td>');
+				            row.append(attribute);
+				            const attack_type = $('<td>Attack_type</td>');
+				            row.append(attack_type);
+				            const difficulty = $('<td>Difficulty</td>');
+				            row.append(difficulty);
+				            const deleteHero = $('<td>Delete Hero</td>');
+				            row.append(deleteHero);
+							table.append(row);
+						}
+					descriptionForNewHero();
+					difficultyAverage();
+				}
+
+				/*function addColumn() {
+					const hero = heroes[heroes.length - 1];
+					const row = document.createElement('tr');
+					const NextOneTrTableHTML = 
+					`<td>${ hero.name }</td>
+					 <td>${ hero.attribute }</td>
+					 <td>${ hero.attack_type }</td>
+					 <td>${ hero.difficulty }</td>`;
+					row.insertAdjacentHTML('beforeend', NextOneTrTableHTML)
+					table.appendChild(row);
+
+					$('body').append(table);				
+				}*/
+
+				function descriptionForNewHero() {
+	            	const hero = heroes[heroes.length - 1];
+	                const row = $('<tr></tr>');
+	                $.each(hero, function(key, value) {
+	                    const column = $('<td></td>')
+	                    column.text(hero[key]);
+	                    row.append(column);
+	                })
+	                const deleteButton = $('<td></td>');
+	                deleteButton.text('Delete');
+	                row.append(deleteButton);
+	                table.append(row);
+	            
+	            	$('body').append(table);
+    			}
+
+
+    			 function difficultyAverage() {
+			        let avg = 0;
+			        $('table').click(deleteHero);
+			        $.each(heroes, function(index, item) {
+			           avg += +item.difficulty;
+			        });
+			        $('#result').text(Math.floor((avg / heroes.length) * 10)/ 10);
+			    }
+
+			    function deleteHero(event) {
+			    	const element = $(event.target)
+					if (element.closest('tr') && element.text() === 'Delete') {
+						const deletedElement = element.closest('tr')[0];
+						$('table').children().each(function(index, child) {
+							if (child === deletedElement) {
+								heroes.splice(index - 1, 1);
+								deletedElement.remove();
+                    			$('[type="submit"]').attr('disabled', false);
+                    			difficultyAverage();
+							}
+						})
+					}
+				}
+
+				let getData = function(){
+        
+		       		const Res = $.ajax({
+		            	url: 'https://jsonplaceholder.typicode.com/users',
+		          	    method: 'GET',
+		          		datatype: 'json'
+		        	})
+
+		         	Res.done(response => {
+		            let objectHero = {};
+			            const difficulty = [1,2,3,4,5,6,7,8,9,10] 
+						const names = ['Underlord', 'Leshrac', 'Windranger', 'Lina', 'Crystal Maiden', 'Ancient Apparation'];
+						const attributes = ['Strength', 'Agility', 'Intelligence']
+						const attack_types = ['Melee', 'Range']
+						/*const heroes = [];*/
+
+
+						function randomInteger(min, max) {
+						let rand = min - 0.5 + Math.random() * (max - min + 1);
+						return Math.round(rand);
+						}
+
+						function generateTable() {
+						let objectHero = {};
+						for(let i = 0; i < names.length; i++ ) {
+							objectHero.name=names[i];
+							objectHero.attribute = attributes[randomInteger(0,2)];
+							objectHero.attack_type = attack_types[randomInteger(0,1)];
+							objectHero.difficulty = Math.round((Math.random() * 10) * 10) / 10;
+						heroes.push(objectHero);
+						objectHero = {}
+							}
+
+							heroes.forEach( hero => {
+								addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty)
+							})	
+						}
+
+						generateTable();  
+		        })
+
+        			Res.fail(err => console.log(error))
+    			}
+    			return {addNewHero,getData};
+	})();
+
+			heroesArray.forEach( hero => {
+						ModuleAnonymFunction.addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty);
+			});
+
+			$('#form').submit(function(event) {
+		    event.preventDefault();
+		    const name = $('[name="name"]').val().trim(); 
+		    const attribute = $('[name="attribute"]').val().trim();
+		    const attack_type = $('[name="attack_type"]').val().trim();
+		    const difficulty = $('[name="difficulty"]').val().trim();
+
+		    if (!name || !attribute || !attack_type || !difficulty) {
+		        console.log('input value'); 
+		        return;
+		    }
+
+		    ModuleAnonymFunction.addNewHero(name, attribute, attack_type, difficulty);
+			$('#form').trigger('reset');
+	});
+			ModuleAnonymFunction.getData();
+			ModuleAnonymFunction.addNewHero('Alchemist', 'Strength', 'Melee',3);
+			ModuleAnonymFunction.addNewHero('Weaver', 'Agility', 'Range',2);
+			ModuleAnonymFunction.addNewHero('Tiny', 'Strength', 'Melee',5);
+});
+	</script>
+</body>
+</html>
