@@ -259,7 +259,7 @@
 						objectHero = {}
 							}
 
-							heroes.forEach( hero => {
+							heroesArray.forEach( hero => {
 								addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty)
 							})	
 						}
@@ -272,9 +272,9 @@
     			return {addNewHero,getData};
 	})();
 
-			heroesArray.forEach( hero => {
+		/*	heroesArray.forEach( hero => {
 						ModuleAnonymFunction.addNewHero(hero.name, hero.attribute, hero.attack_type, hero.difficulty);
-			});
+			});*/
 
 			$('#form').submit(function(event) {
 		    event.preventDefault();
